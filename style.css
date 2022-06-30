@@ -1,0 +1,144 @@
+*, *::before, *::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: sans-serif;
+}
+
+#wrapper {
+	width: 100%;
+	margin: 50px 0;
+	padding: 0 15px;
+}
+
+.video-container {
+	max-width: 800px;
+	height: auto;
+	margin: 0 auto;
+	position: relative;
+	border: 1px solid #000;
+	border-radius: 8px;
+	overflow: hidden;
+}
+.video-player {
+	width: 100%;
+	height: 100%;
+	vertical-align: top;
+}
+.video-controls {
+	position: absolute;
+	display: flex;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-size: 24px;
+	color: #fff;
+	background-color: rgba(0,0,0,0.5);
+	padding: 15px;
+	gap: 15px;
+	transform: translate(0, 100%);
+	pointer-events: none;
+	transition: transform 0.3s ease-in-out;
+}
+
+.video-controls._visible {
+	transform: translate(0, 0);
+	pointer-events: all;
+}
+
+.video-progress-container {
+	width: 100%;
+	height: 20px;
+	background-color: grey;
+	border-radius: 5px;
+	display: flex;
+	justify-content: flex-start;
+	align-content: center;
+	position: relative;
+	/* overflow: hidden; */
+	cursor: pointer;
+}
+.video-progress-container .video-progress {
+	width: 0;
+	height: 100%;
+	border-radius: 5px;
+	background-color: #4285F4;
+	transition: width 0.2s ease-in-out;
+	position: relative;
+}
+.video-progress-container .video-progress::before {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: -4px;
+	height: calc(100% + 8px);
+	width: 4px;
+	border-radius: 5px;
+	background-color: #fff;
+}
+
+
+.video-bottom {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	gap: 50px;
+}
+.video-time {
+	font-size: 24px;
+}
+#video-currentTime {
+	margin-right: 3px;
+}
+#video-allTime {
+	margin-left: 3px;
+}
+
+
+.video-btns {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+}
+
+i {
+	font-size: 24px;
+	color: #fff;
+	transition: color 0.2s ease-in-out;
+	cursor: pointer;
+}
+
+i:hover {
+	color: #4285F4;
+}
+
+@media (max-width: 650px) {
+	.video-controls {
+		gap: 5px;
+	}
+
+	.video-progress-container {
+		height: 10px;
+	}
+
+	.video-bottom {
+		gap: 30px;
+	}
+
+	.video-time {
+		font-size: 18px;
+	}
+
+	i {
+		font-size: 18px;
+	}
+}

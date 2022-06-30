@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Видеоплеер</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body>
+	<div id="wrapper">
+		<div class="video-container">
+			<video poster="" width="400" height="300" class="video-player" id="video-player" contols>
+				<source src="assets/video.mp4" type="video/mp4">
+			</video>
+			<div class="video-controls">
+				<div class="video-progress-container" max="100" value="0" id="video-progress-container">
+					<div class="video-progress" id="video-progress"></div>
+				</div>
+				<div class="video-bottom">
+					<div class="video-time">
+						<span id="video-currentTime">0</span>
+					</div>
+					<div class="video-btns">
+						<div class="video-reset" id="video-reset"><i class="fa-solid fa-rotate-left"></i></div>
+						<div class="video-play" id="video-play"><i class="fa-solid fa-play"></i></div> <!-- <i class="fa-solid fa-pause"></i> -->
+						<div class="video-mute" id="video-mute"><i class="fa-solid fa-volume-high"></i></div> <!-- <i class="fa-solid fa-volume-xmark"></i> -->
+					</div>
+					<div class="video-fullscreen" id="video-fullscreen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://kit.fontawesome.com/2c6a5870d2.js" crossorigin="anonymous"></script>
+	<script src="app.js" type="module"></script>
+</body>
+</html>
