@@ -9,9 +9,12 @@
 </head>
 <body>
 	<div id="wrapper">
-		<div class="video-container">
-			<video poster="" width="400" height="300" class="video-player" id="video-player" contols>
-				<source src="assets/video.mp4" type="video/mp4">
+		<div class="video video-container">
+			<div class="video-preview">
+				<img src="assets/preview.jpg" alt="preview">
+			</div>
+			<video poster="" width="" height="" class="video-player" id="video-player" contols>
+				<source src="#" type="video/mp4">
 			</video>
 			<div class="video-controls">
 				<div class="video-progress-container" max="100" value="0" id="video-progress-container">
@@ -29,6 +32,17 @@
 					<div class="video-fullscreen" id="video-fullscreen"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></div>
 				</div>
 			</div>
+		</div>
+		<a href="#" class="show-info">Горячие клавиши</a>
+		<div class="block-info" hidden>
+			<ul>
+				<li>Пробел - play/pause</li>
+				<li>M - вкл/выкл звук</li>
+				<li>R - запуск видео сначала</li>
+				<li>Стрелка вниз - скрыть меню управления</li>
+				<li>Стрелка влево - перемотка на 10 секунд назад</li>
+				<li>Стрелка вправо - перемотка на 10 секунд вперед</li>
+			</ul>
 		</div>
 	</div>
 

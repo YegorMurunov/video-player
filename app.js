@@ -1,9 +1,14 @@
 import { formatSeconds, isMobile } from './modules/additionalsFunctions.js';
+
 window.addEventListener('DOMContentLoaded', () => {
 	console.log('Привет! Я Егор - автор этого плеера. Если ты хочешь себе сайт, могу предложить свои услуги, посмотри мои работы на сайте портфолио(https://yegormurunov.gq). И если тебе понравится, обязательно напиши мне! 😉');
+	
 	// dom
 	const dom = {
+		preview: document.querySelector('.video-preview'),
 		video: document.getElementById('video-player'),
+		videoContainer: document.querySelector('.video-container'),
+		videoName: 'video.mp4',
 		videoControls: document.querySelector('.video-controls'),
 		videoBtns: document.querySelector('.video-btns'),
 		play: {
@@ -24,20 +29,41 @@ window.addEventListener('DOMContentLoaded', () => {
 		},
 	}
 	
+	// lazy load
+	let isLoad = false;
+
+	const loadVideo = () => {
+		isLoad = true;
+		dom.preview.hidden = true;
+		dom.videoContainer.classList.add('_loading');
+		dom.video.src = `assets/${dom.videoName}`;
+		dom.video.onloadeddata = () => {
+			dom.videoContainer.classList.remove('_loading');
+			playVideo();
+		}
+	}
+
+	dom.preview.onclick = () => {
+		loadVideo();
+	}
+
 	// vars
 	let isPlay = false;
 	let isMute = false;
 
 	// functions
 	const showControls = () => {
-		if ( !dom.videoControls.classList.contains('_visible') ) {
-			dom.videoControls.classList.add('_visible');
+		if ( isLoad ) {
+			if ( !dom.videoControls.classList.contains('_visible') ) {
+				dom.videoControls.classList.add('_visible');
+			}
+		} else {
+			return;
 		}
 	}
-	showControls();
 
-	const hideControls = () => {
-		if ( !isMobile.any() ) {
+	const hideControls = (timer = true) => {
+		if ( timer ) {
 			setTimeout(() => {
 				dom.videoControls.classList.remove('_visible');
 			}, 5000)
@@ -47,17 +73,19 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	const playVideo = () => {
-		if ( isPlay ) {
-			dom.video.pause();
-			dom.play.icon.classList.remove('fa-pause');
-			dom.play.icon.classList.add('fa-play');
-			showControls();
-		} else {
-			dom.video.play();
-			dom.play.icon.classList.remove('fa-play');
-			dom.play.icon.classList.add('fa-pause');
+		if ( isLoad ) {
+			if ( isPlay ) {
+				dom.video.pause();
+				dom.play.icon.classList.remove('fa-pause');
+				dom.play.icon.classList.add('fa-play');
+				showControls();
+			} else {
+				dom.video.play();
+				dom.play.icon.classList.remove('fa-play');
+				dom.play.icon.classList.add('fa-pause');
+			}
+			isPlay = !isPlay;
 		}
-		isPlay = !isPlay;
 	}
 
 	const muteVideo = () => {
@@ -74,14 +102,16 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	const restartVideo = () => {
-		dom.video.currentTime = 0;
+		isLoad ? dom.video.currentTime = 0 : '';
 	}
 
 	const updateProgress = () => {
-		let duration = dom.video.duration;
-		let currentTime = dom.video.currentTime;
-		dom.progressBar.style.width = `${(currentTime / duration) * 100}%`;
-		updateTime(currentTime);
+		if ( isLoad ) {
+			let duration = dom.video.duration;
+			let currentTime = dom.video.currentTime;
+			dom.progressBar.style.width = `${(currentTime / duration) * 100}%`;
+			updateTime(currentTime);
+		}
 	}
 
 	const updateTime = (seconds) => {
@@ -107,14 +137,15 @@ window.addEventListener('DOMContentLoaded', () => {
 	}
 
 	const rewindForward = () => {
-		dom.video.currentTime += 10;
+		isLoad ? dom.video.currentTime += 10 : "";
 	}
 
 	const rewindBackward = () => {
-		dom.video.currentTime -= 10;
+		isLoad ? dom.video.currentTime -= 10 : "";
 	}
 
 	const checkKey = (e) => {
+		e.preventDefault();
 		switch(e.keyCode) {
 			case 32:
 				playVideo();
@@ -131,15 +162,18 @@ window.addEventListener('DOMContentLoaded', () => {
 			case 39:
 				rewindForward();
 				break;
+			case 40:
+				hideControls(false);
+				break;
 			default:
 				return;
 		}
 	}
 
 	// functions call
-	dom.video.onmouseenter = showControls;
+	dom.video.onclick = showControls;
 	dom.video.onmousemove = showControls;
-	dom.video.onmouseover = hideControls;
+	dom.video.onmouseover = () => hideControls(true);
 	dom.play.btn.onclick = playVideo;
 	dom.mute.btn.onclick = muteVideo;
 	dom.restart.onclick = restartVideo;
@@ -147,11 +181,12 @@ window.addEventListener('DOMContentLoaded', () => {
 	dom.progressContainer.onclick = rewindVideo;
 	dom.video.onended = stopVideo;
 	dom.fullscreen.onclick = () => {
-		dom.video.requestFullscreen({ navigationUI: "show" }).then(() => {}).catch(err => {
+		dom.videoContainer.requestFullscreen().then(() => {}).catch(err => {
 			alert(`Произошла ошибка при попытке переключиться в полноэкранный режим: ${err.message} (${err.name})`);		
 		});
 	}
 	window.addEventListener('keydown', checkKey);
+
 	if ( isMobile.any() ) {
 		let div = document.createElement('div');
 		div.className = 'video-hideControls';
@@ -160,7 +195,18 @@ window.addEventListener('DOMContentLoaded', () => {
 		div.innerHTML = '<i class="fa-solid fa-tent-arrows-down"></i>';
 		dom.hideControls = document.getElementById('video-hideContols');
 
-		dom.hideControls.onclick = hideControls;
+		dom.hideControls.onclick = () => hideControls(false);
 		dom.video.onclick = showControls;
+	}
+
+
+
+	// block additional information
+	const showInfo = document.querySelector('.show-info'),
+		blockInfo = document.querySelector('.block-info');
+
+	showInfo.onclick = (e) => {
+		e.preventDefault();
+		blockInfo.hidden = !blockInfo.hidden;
 	}
 });
