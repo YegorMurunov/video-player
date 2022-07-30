@@ -1,4 +1,4 @@
-# Custom Audio Player
+# Custom Video Player
 ### 30.06.2022
 ##### [Author: Yegor Murunov](https://yegormurunov.gq)
 
