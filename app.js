@@ -144,6 +144,20 @@ window.addEventListener('DOMContentLoaded', () => {
 		isLoad ? dom.video.currentTime -= 10 : "";
 	}
 
+	const toggleFullscreen = () => {
+		if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement) {
+			// разворачиваем
+			dom.videoContainer.requestFullscreen()
+				.then(() => {})
+				.catch(err => {
+				alert(`Произошла ошибка при попытке переключиться в полноэкранный режим: ${err.message} (${err.name})`);
+			});
+		} else {
+			// сворачиваем
+			document.exitFullscreen();
+		}
+	}
+
 	const checkKey = (e) => {
 		e.preventDefault();
 		switch(e.keyCode) {
@@ -165,6 +179,9 @@ window.addEventListener('DOMContentLoaded', () => {
 			case 40:
 				hideControls(false);
 				break;
+			case 70:
+				toggleFullscreen();
+				break;
 			default:
 				return;
 		}
@@ -180,11 +197,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	dom.video.ontimeupdate = updateProgress;
 	dom.progressContainer.onclick = rewindVideo;
 	dom.video.onended = stopVideo;
-	dom.fullscreen.onclick = () => {
-		dom.videoContainer.requestFullscreen().then(() => {}).catch(err => {
-			alert(`Произошла ошибка при попытке переключиться в полноэкранный режим: ${err.message} (${err.name})`);		
-		});
-	}
+	dom.fullscreen.onclick = toggleFullscreen;
 	window.addEventListener('keydown', checkKey);
 
 	if ( isMobile.any() ) {
